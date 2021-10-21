@@ -14,14 +14,14 @@ def test_end_to_end():
         # apply repository
         fs.apply([driver, driver_hourly_stats_view])
 
-        # load data into online store
+        # load data into online store (materialize uses offline store functionality)
         fs.materialize_incremental(end_date=datetime.now())
 
         entity_df = pd.DataFrame(
             {"driver_id": [1001], "event_timestamp": [datetime.now()]}
         )
 
-        # Read features from online store
+        # Read features from offline store
         feature_vector = (
             fs.get_historical_features(
                 features=["driver_hourly_stats:conv_rate"], entity_df=entity_df
